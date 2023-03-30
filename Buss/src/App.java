@@ -1,4 +1,7 @@
+import java.util.Scanner;
+
 public class App {
+
 //2D fält för nummret på sittplatserna och tomma platser för bokning och personummer.
     static int[][] plats ={
         {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21},
@@ -42,14 +45,16 @@ public class App {
         }
     }
 //Välj sittplats.
-    static void val() {
+    static void val(Scanner tangentbord) {
         System.out.println("\r\n" + "Välj en ledig plats");
+        int platsval=tangentbord.nextInt();
     }
 
     public static void main(String[] args) throws Exception {
+        Scanner tangentbord = new Scanner(System.in);
         System.out.print("\033[H\033[2J");  
         sittplatser();
-        val();
+        val(tangentbord);
 
     }
 }
