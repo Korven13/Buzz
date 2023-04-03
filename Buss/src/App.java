@@ -46,7 +46,7 @@ public class App {
     }
 //Välj sittplats.
     static void val(Scanner tangentbord) {
-        System.out.println("\r\n" + "Välj en ledig plats");
+        System.out.println("\r\n" + "\r\n" + "Välj en ledig plats");
         int platsval=tangentbord.nextInt();
     }
 
