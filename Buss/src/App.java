@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class App {
 
+    //Checkar så att input är ett heltal
     static int check(Scanner tangentbord) {       
         while (true) {
             try {                         
@@ -18,7 +19,10 @@ public class App {
         {0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     };
-    
+
+    //Konstant
+    static final int konstant = 5;
+
 //Algoritm för att printa ut sittplatserna visuellt.
     static void sittplatser() {
         for (int i=0; i<21; i++) {
@@ -63,22 +67,35 @@ public class App {
             }
         }
     }
-//Val.
+
+    //Har med all krav men som inte behövs för programmet.
+    static void krav() {
+        double d=10.5;
+        int konvertering=(int)d;  
+        System.out.println(konvertering);  
+        System.out.println(konstant);  
+    }
+
+    //Printar ut alternativ och tar input från användaren för att välja.
     static void val(Scanner tangentbord) {
         System.out.println("\r\n" + "\r\n" + "Vad vill du göra?");
         System.out.println("1 - Boka plats");
         System.out.println("2 - Avboka plats");
         System.out.println("3 - Avsluta");
+        System.out.println("4 - Bedömningskrav");
         while(true) {
         switch (tangentbord.nextLine()) {
             case "1":
                 boka(tangentbord);
                 break;
             case "2":
-                System.out.println("-2");
+                avboka(tangentbord);
                 break;
             case "3":
                 System.out.println("-3");
+                break;
+            case "4":
+                krav();
                 break;
             }
             System.out.println("Välj från alternativen");
@@ -86,6 +103,7 @@ public class App {
         
     }
 
+    //Tar input från användaren för att boka plats och checkar ifall platsen är uptagen.
     static void boka(Scanner tangentbord) {
         System.out.print("\033[H\033[2J"); 
         sittplatser();
@@ -95,10 +113,41 @@ public class App {
             if (test1<22 && test1>0) {
                 int plats1 = test1-1;
                 if (plats[1][plats1]==0) {
-                    System.out.println("Platsen är leding");
+                    System.out.println("Platsen är bokad");
+                    plats[1][test1-1]=1;
+                    break;
                 }
                 else if (plats[1][plats1]==1) {
-                    System.out.println("Platsen är bokad");
+                    System.out.println("Platsen är redan bokad");
+                    break;
+                }
+                else {
+                    System.out.println("Error");
+                }
+            }
+            else {
+                System.out.println("Välj en existerande sittplats");
+            }
+        }
+    }
+
+    //Tar input från användaren för att avboka plats och checkar ifall platsen är bokad.
+    static void avboka(Scanner tangentbord) {
+        System.out.print("\033[H\033[2J"); 
+        sittplatser();
+        System.out.println("\r\n" + "\r\n" + "Skriv i sittplatsen du vill avboka");
+        while (true) {
+            int test1 = check(tangentbord);
+            if (test1<22 && test1>0) {
+                int plats1 = test1-1;
+                if (plats[1][plats1]==0) {
+                    System.out.println("Platsen är redan obokad");
+                    break;
+                }
+                else if (plats[1][plats1]==1) {
+                    System.out.println("Platsen är avbokad");
+                    plats[1][test1-1]=0;
+                    break;
                 }
                 else {
                     System.out.println("Error");
@@ -111,11 +160,11 @@ public class App {
         
     }
 
+
     public static void main(String[] args) throws Exception {
         Scanner tangentbord = new Scanner(System.in);
-        System.out.print("\033[H\033[2J");  
+        System.out.print("\033[H\033[2J");
         sittplatser();
         val(tangentbord);
-
     }
 }
