@@ -13,10 +13,17 @@ public class App {
         }
     }
 
-//2D fält för nummret på sittplatserna och tomma platser för bokning och personummer.
+//2D fält för nummret på sittplatserna, tomma platser, personummer, kön.
     static int[][] plats ={
         {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21},
         {0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    };
+    
+    //2D fält för förnamn, efternamn.
+    static string[][] plats_data ={
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     };
 
@@ -76,13 +83,31 @@ public class App {
         System.out.println(konstant);  
     }
 
+    //Gå igenom alla platser, är den bokad, checka ålder, ta ut pris, plussa på total.
+    static void vinst() {
+
+    }
+
+    //Välj namn eller personummer, checka alla platser efter det.
+    static void hitta() {
+
+    }
+
+    //
+    static void skrivut() {
+
+    }
+
     //Printar ut alternativ och tar input från användaren för att välja.
     static void val(Scanner tangentbord) {
         System.out.println("\r\n" + "\r\n" + "Vad vill du göra?");
         System.out.println("1 - Boka plats");
         System.out.println("2 - Avboka plats");
-        System.out.println("3 - Avsluta");
-        System.out.println("4 - Bedömningskrav");
+        System.out.println("3 - Hitta bokning");
+        System.out.println("4 - Beräkna vinst");
+        System.out.println("5 - Skriv ut bokningar");
+        System.out.println("6 - Avsluta");
+        System.out.println("7 - Bedömningskrav");
         while(true) {
         switch (tangentbord.nextLine()) {
             case "1":
@@ -92,9 +117,18 @@ public class App {
                 avboka(tangentbord);
                 break;
             case "3":
-                System.out.println("-3");
+                hitta();
                 break;
             case "4":
+                vinst();
+                break;
+            case "5":
+                skrivut();
+                break;
+            case "6":
+                System.out.println("-3");
+                break;
+            case "7":
                 krav();
                 break;
             }
@@ -113,7 +147,10 @@ public class App {
             if (test1<22 && test1>0) {
                 int plats1 = test1-1;
                 if (plats[1][plats1]==0) {
-                    System.out.println("Platsen är bokad");
+                    System.out.println("Skriv in förnman");
+                    plats_data[0][test1] = tangentbord.nextString();
+                    System.out.println("Förnamn:" + plats_data[0][test1]);
+
                     plats[1][test1-1]=1;
                     break;
                 }
