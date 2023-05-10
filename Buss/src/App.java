@@ -22,9 +22,9 @@ public class App {
     };
     
     //2D fält för förnamn, efternamn.
-    static string[][] plats_data ={
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    static String[][] plats_data = {
+        {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""},
+        {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""},
     };
 
     //Konstant
@@ -89,9 +89,40 @@ public class App {
     }
 
     //Välj namn eller personummer, checka alla platser efter det.
-    static void hitta() {
-
-    }
+     static int hitta(Scanner tangentbord) {
+        System.out.println("\r\n" + "\r\n" + "1-Personummer 2-Namn");
+        while(true) {
+            int val=check(tangentbord);
+            if (val==1) {
+                    System.out.println("Skriv in ditt personnummer");
+                    int input = check(tangentbord);
+                    System.out.println("\033[H\033[2J");
+                    for (int i = 0; i < 21; i++) {
+                        if (plats[2][i] == input) {
+                            System.out.println("Du har bokat plats: " + (i));
+                            return i;
+                    }
+                    
+                }
+                System.out.println("Det finns ingen bokning med ditt personnummer");
+                break;
+            }
+                else if (val==2) {
+                    System.out.println("Skriv in ditt namn");
+                    String input2 = tangentbord.nextLine();
+                    System.out.println("\033[H\033[2J");
+                    for (int i = 0; i < 21; i++) {
+                        if (plats_data[0][i].equals(input2)) {
+                            System.out.println("Du har bokat plats: " + (i));
+                            return i;
+                        }
+                    }
+                    System.out.println("Det finns ingen bokning med ditt namn");
+                    break;
+                }
+            }
+            return -1;
+        }
 
     //
     static void skrivut() {
@@ -100,6 +131,7 @@ public class App {
 
     //Printar ut alternativ och tar input från användaren för att välja.
     static void val(Scanner tangentbord) {
+        while(true) {
         System.out.println("\r\n" + "\r\n" + "Vad vill du göra?");
         System.out.println("1 - Boka plats");
         System.out.println("2 - Avboka plats");
@@ -108,7 +140,6 @@ public class App {
         System.out.println("5 - Skriv ut bokningar");
         System.out.println("6 - Avsluta");
         System.out.println("7 - Bedömningskrav");
-        while(true) {
         switch (tangentbord.nextLine()) {
             case "1":
                 boka(tangentbord);
@@ -117,7 +148,8 @@ public class App {
                 avboka(tangentbord);
                 break;
             case "3":
-                hitta();
+                System.out.println("Hitta genom: ");
+                hitta(tangentbord);
                 break;
             case "4":
                 vinst();
@@ -148,10 +180,16 @@ public class App {
                 int plats1 = test1-1;
                 if (plats[1][plats1]==0) {
                     System.out.println("Skriv in förnman");
-                    plats_data[0][test1] = tangentbord.nextString();
-                    System.out.println("Förnamn:" + plats_data[0][test1]);
+                    plats_data[0][test1] = tangentbord.nextLine();
+                    System.out.println("Skriv in efternamn");
+                    plats_data[1][test1] = tangentbord.nextLine();
+                    System.out.println("Skriv in personnummmer(dag, mån, år) exempel: 010902");
+                    plats[2][test1] = check(tangentbord);
+                    System.out.println("Skriv in kön: 0-Kille 1-Tjej 2-Annat");
+                    plats[3][test1] = check(tangentbord);
 
                     plats[1][test1-1]=1;
+                    System.out.println("\033[H\033[2J");
                     break;
                 }
                 else if (plats[1][plats1]==1) {
@@ -172,27 +210,12 @@ public class App {
     static void avboka(Scanner tangentbord) {
         System.out.print("\033[H\033[2J"); 
         sittplatser();
-        System.out.println("\r\n" + "\r\n" + "Skriv i sittplatsen du vill avboka");
-        while (true) {
-            int test1 = check(tangentbord);
-            if (test1<22 && test1>0) {
-                int plats1 = test1-1;
-                if (plats[1][plats1]==0) {
-                    System.out.println("Platsen är redan obokad");
-                    break;
-                }
-                else if (plats[1][plats1]==1) {
-                    System.out.println("Platsen är avbokad");
-                    plats[1][test1-1]=0;
-                    break;
-                }
-                else {
-                    System.out.println("Error");
-                }
-            }
-            else {
-                System.out.println("Välj en existerande sittplats");
-            }
+        System.out.println("Avboka genom: ");
+        int input = hitta(tangentbord);
+        if (input>=0) {
+            System.out.print("\033[H\033[2J"); 
+            plats[1][input-1]=0;
+            System.out.print("Du har nu avbokat plats: " + input+" "); 
         }
         
     }
