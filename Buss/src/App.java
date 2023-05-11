@@ -16,7 +16,7 @@ public class App {
 //2D fält för nummret på sittplatserna, tomma platser, personummer, kön.
     static int[][] plats ={
         {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     };
@@ -27,10 +27,8 @@ public class App {
         {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""},
     };
 
-    static int[][] sortera = new int[2][21];
-
     //Konstant
-    static final int konstant = 5;
+    static final int Konstant = 5;
 
     //Algoritm för att printa ut sittplatserna visuellt.
     static void sittplatser() {
@@ -77,19 +75,6 @@ public class App {
         }
     }
 
-    //Har med all krav men som inte behövs för programmet.
-    static void krav() {
-        double d=10.5;
-        int konvertering=(int)d;  
-        System.out.println(konvertering);  
-        System.out.println(konstant);  
-    }
-
-    //Gå igenom alla platser, är den bokad, checka ålder, ta ut pris, plussa på total.
-    static void vinst() {
-
-    }
-
     //Välj namn eller personummer, checka alla platser efter det.
      static int hitta(Scanner tangentbord) {
         System.out.println("\r\n" + "\r\n" + "1-Personummer 2-Namn");
@@ -126,18 +111,19 @@ public class App {
             return -1;
         }
 
-    //
-    static void skrivut() {
-        for (int i = 0; i < 21; i++) {
+    //Räknar ut ålder på personen som bokat plats i
+    static int ålder(int i) {
             String str = String.format("%06d", plats[2][i]);
-            sortera[0][i] = Integer.parseInt(str.substring(4,6));
-            System.out.println(sortera[0][i]);
-        }
+            int ålder1 = 23-Integer.parseInt(str.substring(4,6));
+            if (ålder1<0) {
+                ålder1 += 100;
+            }
+            return ålder1;
     }
 
     //Printar ut alternativ och tar input från användaren för att välja.
     static void val(Scanner tangentbord) {
-        while(true) {
+        Task:while(true) {
         System.out.println("\r\n" + "\r\n" + "Vad vill du göra?");
         System.out.println("1 - Boka plats");
         System.out.println("2 - Avboka plats");
@@ -145,7 +131,6 @@ public class App {
         System.out.println("4 - Beräkna vinst");
         System.out.println("5 - Skriv ut bokningar");
         System.out.println("6 - Avsluta");
-        System.out.println("7 - Bedömningskrav");
         switch (tangentbord.nextLine()) {
             case "1":
                 boka(tangentbord);
@@ -158,24 +143,20 @@ public class App {
                 hitta(tangentbord);
                 break;
             case "4":
-                vinst();
+                åldrar();
                 break;
             case "5":
                 skrivut();
                 break;
             case "6":
-                System.out.println("-3");
-                break;
-            case "7":
-                krav();
-                break;
+                break Task;
             }
             System.out.println("Välj från alternativen");
         }
         
     }
 
-    //Tar input från användaren för att boka plats och checkar ifall platsen är uptagen.
+    //Tar input från användaren för att boka plats, checkar ifall platsen är uptagen och tar in all info.
     static void boka(Scanner tangentbord) {
         System.out.print("\033[H\033[2J"); 
         sittplatser();
@@ -191,7 +172,7 @@ public class App {
                     plats_data[1][test1] = tangentbord.nextLine();
                     System.out.println("Skriv in personnummmer(dag, mån, år) exempel: 010902");
                     plats[2][test1] = check(tangentbord);
-                    System.out.println("Skriv in kön: 0-Kille 1-Tjej 2-Annat");
+                    System.out.println("Skriv in kön: 1-Kille 2-Tjej 3-Annat");
                     plats[3][test1] = check(tangentbord);
 
                     plats[1][test1-1]=1;
@@ -227,108 +208,119 @@ public class App {
     }
 
 
+    //Skrivet ut lista med info om alla resenärer, sorterad efter ålder.
+    public static void skrivut() {
+            int antalplatser = 0;
+            for (int i=0; i<20; i++){
+                if (plats[1][i]==1){
+                    antalplatser++;
+                }
+            }
+    
+        //Skapar två arrays med längden av antalet platser  
+            int ålder[]  = new int[antalplatser];
+            int personummerplatser[] = new int[antalplatser];
+            int g = 0;
+            for (int i=0; i<20; i++){
+                if (plats[2][i]>0){
+                    ålder[g] = ålder(i);
+                    personummerplatser[g] = i;
+                    g++;
+                }
+                else{
+                    continue;
+                }
+            }  
+
+
+            int temp = 0;          
+            for (int i = 0; i<ålder.length; i++) {  
+              for (int j = i+1; j<ålder.length; j++) {    
+                //Jämför ålder med efterföljande element.
+                  if(ålder[i] >ålder[j]) {  
+
+                    //Byter plats i arraysen efter storleksordnuing
+
+                     temp = ålder[i];    
+                     ålder[i] = ålder[j];    
+                     ålder[j] = temp;  
+                     temp = personummerplatser[i];    
+                     personummerplatser[i] =personummerplatser[j];    
+                     personummerplatser[j] = temp;  
+                   }    
+                }    
+            }
+            //Printar ut plats info i sorterad ordning.
+            System.out.print("\033[H\033[2J");
+            for (int i=0; i<antalplatser; i++){
+                System.out.println("plats "+(i+1)+" i ordningen");
+                System.out.println("------------------------");
+                System.out.println("sitter på plats: "+ (personummerplatser[i]));
+                System.out.println("personummer: "+ String.format("%06d", plats[2][personummerplatser[i]]));
+                System.out.println("Namn: "+plats_data[0][personummerplatser[i]]);
+                System.out.println("Kön: "+ plats_data[1][personummerplatser[i]]);
+                System.out.println("ålder: "+ ålder[i]);
+                System.out.println("------------------------");
+        }
+    }
+
+    //Totala kostnaden.
+    static void åldrar() {
+        //Räknar antalet resenärer i varje åldersgrupp
+        int under18 = 0;
+        int vuxen = 0;
+        int över69 = 0;
+        for (int i=0; i<20; i++){
+            if (plats[1][i]==1) {
+                if (ålder(i)<18) {
+                    under18++;
+                }
+                else if (ålder(i)>69) {
+                    över69++;
+                }
+                else {
+                    vuxen++;
+                }
+            }
+        }
+        //Printar ut sålda biljetter för årsgrupperna och totala intäkterna.
+        System.out.print("\033[H\033[2J");
+        System.out.println("Sålda biljetter:");
+        System.out.println("Under 18: " + under18);
+        System.out.println("Vuxen: " + vuxen);
+        System.out.println("Över 69: " + över69);
+        System.out.println("Totala intäkter: " + String.format("%.1f", (kostnad(under18, vuxen, över69))) + "kr");
+        System.out.println("\r\n");
+    }
+
+    //Räknar ut totala intäkerna.
+    public static float kostnad(int under18, int vuxen, int över69) {
+        float cost = 0;
+        if (under18 == 0 && vuxen == 0 && över69 == 0) {
+            return 0;
+        }
+           
+            if (under18 > 0) {
+                cost += 149.9;
+                under18--;
+            }
+            else if (vuxen > 0) {
+                cost += 299.9;
+                vuxen--;
+               
+            }
+            else if (över69 > 0) {
+                cost += 200;
+                över69--;
+            }
+            return cost + kostnad(under18, vuxen, över69);
+           
+    }
+
     public static void main(String[] args) throws Exception {
         Scanner tangentbord = new Scanner(System.in);
         System.out.print("\033[H\033[2J");
         sittplatser();
         val(tangentbord);
     }
-}
-
-
-
-
-
-
-
-
-
-
-public static void sortering() {
-    //Tar fram antelet plateser som är bokade
-        int antalplats = 0;
-        for (int i=0; i<20; i++){
-            if (plats[1][i]==1){
-                antalplats += 1;
-            }
-            else{
-                continue;
-            }
-        }
-
-    //Skapar två arrayer som är längden av antalet platser  
-        int personummerplatserålder[]  = new int[antalplats];
-        int personummerplatser[] = new int[antalplats];
-        int g = 0;
-        for (int i=0; i<20; i++){
-            if (plats[2][i]>0){
-                personummerplatserålder[g] = PersNumÅlder(Integer.toString(plats[2][i]));
-                personummerplatser[g] = i;
-                g = g+1;
-            }
-            else{
-                continue;
-            }
-        }  
-    //går igenom alla platser och ger ena arrayen värdet på personummret och andra åldern på personen som sitter på den platsen
-       
-
-
-        int temp = 0;          
-        for (int i = 0; i <personummerplatserålder.length; i++) {  
-          for (int j = i+1; j <personummerplatserålder.length; j++) {    
-            //För varje element i personummerplatserålder jämförs det med varje efterföljande element i arrayen
-              if(personummerplatserålder[i] >personummerplatserålder[j]) {  
-                // Om det efterföljande elementet är mindre än det aktuella elementet så byter de plats i arrayen.
-                // Samtidigt byter också motsvarande element i personummerplatser-arrayen plats.  
-                 temp = personummerplatserålder[i];    
-                 personummerplatserålder[i] = personummerplatserålder[j];    
-                 personummerplatserålder[j] = temp;  
-                 temp = personummerplatser[i];    
-                 personummerplatser[i] =personummerplatser[j];    
-                 personummerplatser[j] = temp;  
-               }    
-            }    
-        }
-        //Sorterar åldrarna från minst till störst och anger samtidigt vilken plats den åldern sitter på
-       
-        System.out.println("info för platser i ordninng");
-        for (int i=0; i<antalplats; i++){
-            System.out.println("plats "+i+" i ordningen");
-            System.out.println("------------------------");
-            System.out.println("sitter på plats: "+ (personummerplatser[i]));
-            System.out.println("personummer: "+plats[2][personummerplatser[i]]);
-            System.out.println("Namn: "+platserinfo[0][personummerplatser[i]]);
-            System.out.println("Kön: "+ platserinfo[1][personummerplatser[i]]);
-            System.out.println("ålder: "+ personummerplatserålder[i]);
-            System.out.println("------------------------");
-            // Printar ut allt i ordning baserat på tidigare alorithmer
-    }
-}
-
-
-
-
-
-public static int bokningskostnaduträkning(int under18, int over18, int over69) {
-        int cost = 0;
-        if (under18 == 0 && over18 == 0 && over69 == 0) {
-            return 0;
-        }
-           
-            if (under18 > 0) {
-                cost += 149;
-                under18--;
-            }
-            else if (over18 > 0) {
-                cost += 299;
-                over18--;
-               
-            }
-            else if (over69 > 0) {
-                cost += 200;
-                over69--;
-            }
-            return cost + bokningskostnaduträkning(under18, over18, over69);
-           
 }
