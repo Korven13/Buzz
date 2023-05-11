@@ -16,7 +16,7 @@ public class App {
 //2D fält för nummret på sittplatserna, tomma platser, personummer, kön.
     static int[][] plats ={
         {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21},
-        {0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     };
@@ -32,7 +32,7 @@ public class App {
     //Konstant
     static final int konstant = 5;
 
-//Algoritm för att printa ut sittplatserna visuellt.
+    //Algoritm för att printa ut sittplatserna visuellt.
     static void sittplatser() {
         for (int i=0; i<21; i++) {
             if (plats[1][i] == 1 && plats[0][i] < 10) {
@@ -129,11 +129,9 @@ public class App {
     //
     static void skrivut() {
         for (int i = 0; i < 21; i++) {
-            String str = plats[2][i];
-        String str = "1234567890";
-        int fullInt = Integer.parseInt(str);
-        String first4char = str.substring(0,4);
-        int intForFirst4Char = Integer.parseInt(first4char);
+            String str = String.format("%06d", plats[2][i]);
+            sortera[0][i] = Integer.parseInt(str.substring(4,6));
+            System.out.println(sortera[0][i]);
         }
     }
 
@@ -235,4 +233,102 @@ public class App {
         sittplatser();
         val(tangentbord);
     }
+}
+
+
+
+
+
+
+
+
+
+
+public static void sortering() {
+    //Tar fram antelet plateser som är bokade
+        int antalplats = 0;
+        for (int i=0; i<20; i++){
+            if (plats[1][i]==1){
+                antalplats += 1;
+            }
+            else{
+                continue;
+            }
+        }
+
+    //Skapar två arrayer som är längden av antalet platser  
+        int personummerplatserålder[]  = new int[antalplats];
+        int personummerplatser[] = new int[antalplats];
+        int g = 0;
+        for (int i=0; i<20; i++){
+            if (plats[2][i]>0){
+                personummerplatserålder[g] = PersNumÅlder(Integer.toString(plats[2][i]));
+                personummerplatser[g] = i;
+                g = g+1;
+            }
+            else{
+                continue;
+            }
+        }  
+    //går igenom alla platser och ger ena arrayen värdet på personummret och andra åldern på personen som sitter på den platsen
+       
+
+
+        int temp = 0;          
+        for (int i = 0; i <personummerplatserålder.length; i++) {  
+          for (int j = i+1; j <personummerplatserålder.length; j++) {    
+            //För varje element i personummerplatserålder jämförs det med varje efterföljande element i arrayen
+              if(personummerplatserålder[i] >personummerplatserålder[j]) {  
+                // Om det efterföljande elementet är mindre än det aktuella elementet så byter de plats i arrayen.
+                // Samtidigt byter också motsvarande element i personummerplatser-arrayen plats.  
+                 temp = personummerplatserålder[i];    
+                 personummerplatserålder[i] = personummerplatserålder[j];    
+                 personummerplatserålder[j] = temp;  
+                 temp = personummerplatser[i];    
+                 personummerplatser[i] =personummerplatser[j];    
+                 personummerplatser[j] = temp;  
+               }    
+            }    
+        }
+        //Sorterar åldrarna från minst till störst och anger samtidigt vilken plats den åldern sitter på
+       
+        System.out.println("info för platser i ordninng");
+        for (int i=0; i<antalplats; i++){
+            System.out.println("plats "+i+" i ordningen");
+            System.out.println("------------------------");
+            System.out.println("sitter på plats: "+ (personummerplatser[i]));
+            System.out.println("personummer: "+plats[2][personummerplatser[i]]);
+            System.out.println("Namn: "+platserinfo[0][personummerplatser[i]]);
+            System.out.println("Kön: "+ platserinfo[1][personummerplatser[i]]);
+            System.out.println("ålder: "+ personummerplatserålder[i]);
+            System.out.println("------------------------");
+            // Printar ut allt i ordning baserat på tidigare alorithmer
+    }
+}
+
+
+
+
+
+public static int bokningskostnaduträkning(int under18, int over18, int over69) {
+        int cost = 0;
+        if (under18 == 0 && over18 == 0 && over69 == 0) {
+            return 0;
+        }
+           
+            if (under18 > 0) {
+                cost += 149;
+                under18--;
+            }
+            else if (over18 > 0) {
+                cost += 299;
+                over18--;
+               
+            }
+            else if (over69 > 0) {
+                cost += 200;
+                over69--;
+            }
+            return cost + bokningskostnaduträkning(under18, over18, over69);
+           
 }
