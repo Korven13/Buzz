@@ -27,6 +27,8 @@ public class App {
         {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""},
     };
 
+    static int[][] sortera = new int[2][21];
+
     //Konstant
     static final int konstant = 5;
 
@@ -126,7 +128,13 @@ public class App {
 
     //
     static void skrivut() {
-
+        for (int i = 0; i < 21; i++) {
+            String str = plats[2][i];
+        String str = "1234567890";
+        int fullInt = Integer.parseInt(str);
+        String first4char = str.substring(0,4);
+        int intForFirst4Char = Integer.parseInt(first4char);
+        }
     }
 
     //Printar ut alternativ och tar input från användaren för att välja.
